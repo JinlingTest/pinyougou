@@ -40,7 +40,7 @@ app.controller('typeTemplateController' ,function($scope,$controller,typeTemplat
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
+		if($scope.entity.id != null){//如果有ID
 			serviceObject=typeTemplateService.update( $scope.entity ); //修改  
 		}else{
 			serviceObject=typeTemplateService.add( $scope.entity  );//增加 
@@ -59,16 +59,24 @@ app.controller('typeTemplateController' ,function($scope,$controller,typeTemplat
 	
 	 
 	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		typeTemplateService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.success){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds=[];
-				}						
-			}		
-		);				
+	$scope.dele=function(){
+		if($scope.selectIds.length == 0){
+			alert("您尚未选中!");
+		}else{
+			//获取选中的复选框			
+			typeTemplateService.dele( $scope.selectIds ).success(
+				function(response){
+					if(response.success){
+						alert("删除成功!");
+						$scope.reloadList();//刷新列表
+						$scope.selectIds=[];
+					}else{
+						alert("删除失败!");
+					}						
+				}		
+			);	
+		}
+					
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 

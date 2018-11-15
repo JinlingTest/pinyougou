@@ -69,7 +69,6 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	
 	//搜索
 	$scope.search=function(page,rows){		
-		alert(11);
 		sellerService.search(page,rows,$scope.searchEntity).success(
 			function(response){
 				$scope.list=response.rows;	

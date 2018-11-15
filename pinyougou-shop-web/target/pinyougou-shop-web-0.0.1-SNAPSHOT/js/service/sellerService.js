@@ -34,6 +34,6 @@ app.service('sellerService',function($http){
 		return $http.post('../seller/add.do',entity);
 	};
 	this.getUsername=function(){
-		return $http.post('../login/getUsername.do',entity);
+		return $http.get('../login/getUsername.do');
 	}
 });

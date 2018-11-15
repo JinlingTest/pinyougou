@@ -22,6 +22,18 @@ public class ItemCatController {
 	@Reference
 	private ItemCatService itemCatService;
 	
+	/***
+	 * 根据父ID查询下级
+	 * @param parentId
+	 * @return
+	 */
+	@RequestMapping("/findByParentId")
+	public List<TbItemCat> findByParentId(Long parentId){
+		List<TbItemCat> list = itemCatService.findByParentId(parentId);
+		return list;
+	}
+	
+	
 	/**
 	 * 返回全部列表
 	 * @return
