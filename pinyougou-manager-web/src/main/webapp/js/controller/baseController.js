@@ -20,6 +20,23 @@ app.controller('baseController' ,function($scope){
 	
 	$scope.selectIds=[];//选中的ID集合 
 
+	//全选操作
+	$scope.fullSelection=function($event){
+		
+		if($event.target.checked){   //如果被选中那么就将所有的都增加到数组中，实现全选
+			
+			//页面显示全选效果
+			$("input[type='checkbox']").prop("checked",true);
+			angular.forEach($scope.list,function(list,index){
+				$scope.selectIds[index] = list.id;
+			})
+		}else{   //取消全选，清空数组
+			$scope.selectIds=[];
+			$("input[type='checkbox']").prop("checked",false);
+
+		}
+	}
+	
 	//更新复选
 	$scope.updateSelection = function($event, id) {		
 		if($event.target.checked){//如果是被选中,则增加到数组
