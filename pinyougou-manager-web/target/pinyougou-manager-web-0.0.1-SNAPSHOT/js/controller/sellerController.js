@@ -68,13 +68,27 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	$scope.searchEntity={};//定义搜索对象 
 	
 	//搜索
-	$scope.search=function(page,rows){			
+	$scope.search=function(page,rows){		
+		alert(11);
 		sellerService.search(page,rows,$scope.searchEntity).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
+	};
+	//审核用户
+	//更改状态
+	$scope.updateStatus=function(sellerId,status){
+		sellerService.updateStatus(sellerId,status).success(
+			function(response){
+				if(response.success){
+					$scope.reloadList();//重新加载
+				}else{
+					alert(response.message);
+				}				
+			}
+		);		
 	}
     
 });	

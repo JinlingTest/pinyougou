@@ -1,0 +1,21 @@
+package com.pinyougou.manager.controller;
+
+import java.util.Map;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/login")
+public class LoginController {
+	
+	@RequestMapping("/getUsername")
+	public String getName() {
+		
+		String loginUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("登录者"+loginUsername);
+		return loginUsername;
+	}
+	
+}

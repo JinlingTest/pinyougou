@@ -99,7 +99,6 @@ app.controller('typeTemplateController' ,function($scope,$controller,typeTemplat
 			$scope.specList = {data:response};
 		})
 	}
-	
 	//增加扩展属性行
 	$scope.addTableRow=function(){
 		$scope.entity.customAttributeItems.push({});

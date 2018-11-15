@@ -55,8 +55,21 @@ public class TbSeller implements Serializable{
     public String getSellerId() {
         return sellerId;
     }
+    
+    
 
-    public void setSellerId(String sellerId) {
+    @Override
+	public String toString() {
+		return "TbSeller [sellerId=" + sellerId + ", name=" + name + ", nickName=" + nickName + ", password=" + password
+				+ ", email=" + email + ", mobile=" + mobile + ", telephone=" + telephone + ", status=" + status
+				+ ", addressDetail=" + addressDetail + ", linkmanName=" + linkmanName + ", linkmanQq=" + linkmanQq
+				+ ", linkmanMobile=" + linkmanMobile + ", linkmanEmail=" + linkmanEmail + ", licenseNumber="
+				+ licenseNumber + ", taxNumber=" + taxNumber + "]";
+	}
+
+
+
+	public void setSellerId(String sellerId) {
         this.sellerId = sellerId == null ? null : sellerId.trim();
     }
 
