@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -105,5 +107,15 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
+		/***
+		 * 展示类型模板下拉列表
+		 * @return
+		 */
+		public List<Map>  selectOptionList(){
+			
+			List<Map> optionList = typeTemplateMapper.selectOptionList();
+
+			return optionList;
+		}
 	
 }

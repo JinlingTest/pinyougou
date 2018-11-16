@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller   ,itemCatService,typeTemplateService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -32,19 +32,25 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	}
 	
 	//保存 
-	$scope.save=function(){				
+	$scope.save=function(){		
 		var serviceObject;//服务层对象  				
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
+			
+			//根据查询所在的级别进行增加
+			$scope.entity.parentId = $scope.parentId;    //赋予上级的ID
+			
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
 				if(response.success){
 					//重新查询 
-		        	$scope.reloadList();//重新加载
+		        	//$scope.reloadList();//重新加载
+		        	$scope.findByParentId($scope.parentId);    //添加之后回到添加的所在级别，让用户看到是否添加成功
 				}else{
+					
 					alert(response.message);
 				}
 			}		
@@ -76,5 +82,42 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
+	//根据父ID查询下级
+    $scope.findByParentId=function(parentId){
+    	itemCatService.findByParentId(parentId).success(function(response){
+    		$scope.parentId = parentId;    //每次查询都会记录上一级的Id
+    		$scope.list = response;
+    	})
+    }
+    //设置默认级别为1
+    $scope.grande = 1;
+    //设置级别  ，每次点击查询下级的时候，调用设置级别的方法，然后在对级别进行判断，显示级别名称
+    $scope.setGrade=function(value){
+    	$scope.grade = value;
+    }
+    //读取级别列表
+    $scope.selectList = function(p_entity){
+    	if($scope.grade == 1){  //级别为1的时候
+    		$scope.entity_1 = null;
+    		$scope.entity_2 = null;
+    	}   
+    	if($scope.grade == 2){
+    		$scope.entity_1 = p_entity;
+    		$scope.entity_2 = null;
+    	}
+    	if($scope.grade == 3){
+    		$scope.entity_2 = p_entity;
+    	}
+    	$scope.findByParentId(p_entity.id);   //查询此级的下级	
+    }
+    
+	$scope.typeList = {data:[]};
+    //类型模板下拉列表
+    $scope.selectOptionList = function(){
+    	typeTemplateService.selectOptionList().success(function(response){
+    		//alert(JSON.parse(response));
+    		$scope.typeList = {data:response};
+    	}) 
+    }
     
 });	

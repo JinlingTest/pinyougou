@@ -29,4 +29,5 @@ app.service('itemService',function($http){
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../item/search.do?page='+page+"&rows="+rows, searchEntity);
 	} 
+
 });
