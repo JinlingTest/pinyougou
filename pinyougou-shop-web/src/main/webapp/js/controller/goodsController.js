@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService,uploadService){	
+app.controller('goodsController' ,function($scope,$controller   ,goodsService,uploadService, itemCatService,typeTemplateService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -114,5 +114,49 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 		$scope.entity.goodsDesc.itemImages.splice(index,1);
 	}
 	
-    
+	//显示一级下拉列表
+	$scope.selectItemCat1List=function(){
+		//参数为0，一级下拉列表
+		itemCatService.findByParentId(0).success(function(response){
+			$scope.itemCat1List = response;
+		})
+	}
+	
+	//显示二级下拉列表，分类展示
+	$scope.$watch('entity.goods.category1Id',function(newValue,oldValue){
+		//根据改变的新的值（id）去查询
+		itemCatService.findByParentId(newValue).success(function(response){
+			$scope.itemCat2List = response;
+		})
+	})
+	
+	//显示三级下拉列表，分类展示
+	$scope.$watch('entity.goods.category2Id',function(newValue,oldValue){
+		//根据改变的新的值（id）去查询
+		itemCatService.findByParentId(newValue).success(function(response){
+			$scope.itemCat3List = response;
+		})
+	})
+	
+	//模板ID
+	$scope.$watch('entity.goods.category3Id',function(newValue,oldValue){
+		//根据改变的新的值（id）去查询
+		itemCatService.findOne(newValue).success(function(response){
+			$scope.entity.goods.typeTemplateId = response.typeId;
+		})
+	})
+	
+	//当模板的ID更新之后就改变品牌的列表
+	$scope.$watch('entity.goods.typeTemplateId',function(newValue,oldValues){
+		//当模板id更新之后，根据模板的Id去类型模板表中去查询（模板表包含类别与品牌，衣蛾类别对多品牌）
+		typeTemplateService.findOne(newValue).success(function(response){
+			$scope.typeTemplate = response;   //获取类型模板
+			$scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
+			//获取扩展属性   goodesc是属于entity下面的组合实体类中一个实体
+			$scope.entity.goodsDesc.customAttributeItems = 
+				JSON.parse($scope.typeTemplate.customAttributeItems);
+		})
+		
+	})
+
 });	
