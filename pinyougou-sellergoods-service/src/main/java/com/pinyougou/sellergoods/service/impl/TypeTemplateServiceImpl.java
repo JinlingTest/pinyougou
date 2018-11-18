@@ -136,7 +136,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			System.out.println(specIds);
 			//将specIds转化为JSON
 			List<Map> list = JSON.parseArray(specIds,Map.class);
-			//遍历集合，通过此集合中的每一个规格id去国哥明细表中查询出规格选项
+			//遍历集合，通过此集合中的每一个规格id去明细表中查询出规格选项
 			for (Map map : list) {
 				TbSpecificationOptionExample example = new TbSpecificationOptionExample();
 				com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria = example.createCriteria();

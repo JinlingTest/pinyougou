@@ -3,7 +3,6 @@ app.service("uploadService",function($http){
 		//模拟表单提交
 		var formData = new FormData();
 		formData.append('file',file.files[0]);
-		
 		return $http({
 			method:'POST',
 			url:'../upload.do',

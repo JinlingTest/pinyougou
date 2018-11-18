@@ -35,7 +35,9 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" 
+	ng-controller="goodsController" ng-init="selectItemCat1List();findOne()">
+
 
             <!-- 正文区域 -->
             <section class="content">
@@ -99,7 +101,8 @@
 		                           
 		                           <div class="col-md-2 title">品牌</div>
 		                           <div class="col-md-10 data">
-		                              <select class="form-control" ng-model="entity.goods.brandId"  ng-options="brand.id as brand.text for brand in typeTemplate.brandIds"></select>
+		                              <select class="form-control" ng-model="entity.goods.brandId"  
+		                                     ng-options="brand.id as brand.text for brand in typeTemplate.brandIds"></select>
 		                           </div>
 		
 								   <div class="col-md-2 title">副标题</div>
@@ -198,15 +201,16 @@
 	                                
 		                                <div ng-repeat="pojo in specList">
 			                                <div class="col-md-2 title">{{pojo.text}}</div>
-					                        <div class="col-md-10 data">
-					                               
+					                        <div class="col-md-10 data">  
 					                            <span ng-repeat="option in pojo.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()" >{{option.optionName}}					                            				                            	
-					                            </span>  																							
-					                            	
+					                            	<input  type="checkbox" 
+					                            	ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()" >
+					                            	{{option.optionName}}					                            				                            	
+					                            </span>  																							 	
 					                        </div>
 		                                </div>   
-										{{entity.itemList}}
+		                                {{entity.goodsDesc.specificationItems}}
+										<!-- {{entity.itemList}} -->
 		                                                                                  
 	                                </div>
 	

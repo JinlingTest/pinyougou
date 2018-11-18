@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService,uploadService, itemCatService,typeTemplateService){	
+app.controller('goodsController' ,function($scope,$controller,$location ,goodsService,uploadService, itemCatService,typeTemplateService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -23,7 +23,13 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 	}
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){	
+		var id = $location.search()['id'];
+		alert(id);
+		//当id为空的时候咱们就不需要去查询，当接受到id之后那么就查询
+		if(id == null){
+			return ;
+		}
 		goodsService.findOne(id).success(
 			function(response){
 				$scope.entity= response;					
@@ -104,7 +110,7 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 		})
 	};
 	
-	$scope.entity={goods:{},goodsDesc:{itemImages:[]}};   //定义页面实体结构
+	$scope.entity = {goodsDesc:{itemImages:[],specificationItems:[]}};
 	//添加图片列表
 	$scope.add_image_entity = function(){
 		$scope.entity.goodsDesc.itemImages.push($scope.image_entity);
@@ -113,7 +119,6 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 	$scope.remove_image_entity=function(index){
 		$scope.entity.goodsDesc.itemImages.splice(index,1);
 	}
-	
 	//显示一级下拉列表
 	$scope.selectItemCat1List=function(){
 		//参数为0，一级下拉列表
@@ -138,7 +143,7 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 		})
 	})
 	
-	//显示三级下拉列表，分类展示
+	//模板ID
 	$scope.$watch('entity.goods.category3Id',function(newValue,oldValue){
 		//根据改变的新的值（id）去查询
 		itemCatService.findOne(newValue).success(function(response){
@@ -155,8 +160,118 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 			//获取扩展属性   goodesc是属于entity下面的组合实体类中一个实体
 			$scope.entity.goodsDesc.customAttributeItems = 
 				JSON.parse($scope.typeTemplate.customAttributeItems);
-		})
+			//$scope.typeTemplate.specIds = JSON.parse($scope.typeTemplate.specIds);
+		});
+		//当模板的ID变化之后，查询此模板下面的额规格选项
+		typeTemplateService.findSpecList(newValue).success(function(response){
+			$scope.specList = response;
+		});
 		
 	})
+	
+	
+	/*
+	 	[	
+	 		{"attributeName":"网络","attributeValue":["移动3G","移动4G"]},
+	  		{"attributeName":"机身内存","attributeValue":["16G","32G"]}
+		]
+	 */
+	
+	//定义规格集合
+	//$scope.entity = {goodsDesc:{itemImages:[],specificationItems:[]}};
+	//name表示的是页面传递过来的 网络,机身内存这种值，value指的是 移动3G,4G这种值
+	$scope.updateSpecAttribute = function($event,name,value){
 
+		//调用baseController中的方法，判断集合是否为空
+		var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems,
+					'attributeName',name);
+		if(object != null){
+			
+			if($event.target.checked){   //点击勾选上
+				//往匹配上的对象中添加值  attributeValue
+				object.attributeValue.push(value);
+			}else{    //点击取消勾选
+				object.attributeValue.splice( object.attributeValue.indexOf(value) , 1 );   //移除
+				if(object.attributeValue == 0){   //如果全部移除
+					$scope.entity.goodsDesc.specificationItems.splice(
+							$scope.entity.goodsDesc.specificationItems.indexOf(object , 1));   //从组合实体类中的specificationItems集合中移除此空集合
+				}
+			}
+		}else{     //当对象为空的时候    ,直接push到集合中一个空的对象，然后再向里面添加页面传递过来的name与value
+			$scope.entity.goodsDesc.specificationItems.push({"attributeName":name,"attributeValue":[value]});
+		}
+	}
+
+	//创建SKU列表
+	$scope.createItemList=function(){
+		
+		//创建商品列表   
+		$scope.entity.itemList = [{spec:{},price:0,num:99999,status:'0',isDefault:'0'}];
+		//获取模板类别表中 (获取到的是一个规格选项集合)
+		var items = $scope.entity.goodsDesc.specificationItems;
+
+		//规格的种类决定外层循环  (4G,3G)
+		for(var i = 0 ; i < items.length ; i++){
+			
+			$scope.entity.itemList = 
+				addColumn($scope.entity.itemList ,  items[i].attributeName , items[i].attributeValue);
+			
+		}
+	}
+
+		//注意attributeValue是一个规格选项的集合
+		addColumn = function(itemList , attributeName , attributeValue){
+			
+			var newList = [];    //重新创建一个集合
+			
+			for(var i = 0 ; i < itemList.length ; i++){
+				var oldRow = itemList[i];
+				for(var j = 0 ;  j < attributeValue.length ; j++){   //循环的是规格选项的集合（3G,4G），控制行数
+					//对原来的SKU进行深度克隆
+					var newRow = JSON.parse(JSON.stringify(oldRow));      
+					//在克隆后的SKU上面继续进行扩展  spec属性 
+					/*
+						第一次循环的是网络这个规格，规格选项中选择了2个规格属性
+						网络：34,4G   所以第一次生成了两个SKU列表，规格选项决定行数
+						此处需要扩展两次(循环两次，因为网络里面有3G,4G两个规格选项)
+					 */
+					newRow.spec[attributeName] = attributeValue[j];     
+					newList.push(newRow);  
+				
+				}
+				/* 
+					循环两次结束之后，产生了一个新的集合，集合的长度为2，
+					即产生两个SKU列表，扩展了原始的集合4G，3G
+					[{spec:{attrbuteName:网络,attributeValue:4G},price:0,num:99999,status:'0',isDefault:'0'}]
+					[{spec:{attrbuteName:网络,attributeValue:3G},price:0,num:99999,status:'0',isDefault:'0'}]
+				*/
+			}
+			/*
+				将原来的$scope.entity.itemList集合重新赋值，再对新改变后的集合进行遍历操作
+			*/
+			return newList;    
+		}
+		
+		
+		$scope.status=['未审核','已审核','审核未通过','已关闭'];
+		
+		//商品分类列表
+		//查询商品的分类列表
+		$scope.itemCatList = [];
+		$scope.findItemCatList = function(){
+			
+			//查询所有的分类  ，不使用关联查询
+			itemCatService.findAll().success(function(response){
+				for(var i = 0 ; i < response.length ; i++){
+					//将查询到的商品分类的id作为下标，对应其值，在页面进行获取的时候直接通过Index就可以获取到的对应的值
+					$scope.itemCatList[response[i].id] = response[i].name;
+				}
+				
+			})
+			
+			
+		}
+		
+		
+		
 });	
