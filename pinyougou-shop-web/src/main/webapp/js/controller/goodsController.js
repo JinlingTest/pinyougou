@@ -104,7 +104,7 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 		})
 	};
 	
-	$scope.entity={goods:{},goodsDesc:{itemImages:[]}};   //定义页面实体结构
+	$scope.entity = {goodsDesc:{itemImages:[],specificationItems:[]}};
 	//添加图片列表
 	$scope.add_image_entity = function(){
 		$scope.entity.goodsDesc.itemImages.push($scope.image_entity);
@@ -155,8 +155,114 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,up
 			//获取扩展属性   goodesc是属于entity下面的组合实体类中一个实体
 			$scope.entity.goodsDesc.customAttributeItems = 
 				JSON.parse($scope.typeTemplate.customAttributeItems);
-		})
+			
+		});
+		//当模板的ID变化之后，查询此模板下面的额规格选项
+		typeTemplateService.findSpecList(newValue).success(function(response){
+			$scope.specList = response;
+		});
 		
 	})
+	
+	
+	/*
+	 	[	
+	 		{"attributeName":"网络","attributeValue":["移动3G","移动4G"]},
+	  		{"attributeName":"机身内存","attributeValue":["16G","32G"]}
+		]
+	 */
+	
+	//定义规格集合
+	//$scope.entity = {goodsDesc:{itemImages:[],specificationItems:[]}};
+	//name表示的是页面传递过来的 网络,机身内存这种值，value指的是 移动3G,4G这种值
+	$scope.updateSpecAttribute = function($event,name,value){
+
+		//调用baseController中的方法，判断集合是否为空
+		var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems,
+					'attributeName',name);
+		if(object != null){
+			
+			if($event.target.checked){   //点击勾选上
+				//往匹配上的对象中添加值  attributeValue
+				object.attributeValue.push(value);
+			}else{    //点击取消勾选
+				object.attributeValue.splice( object.attributeValue.indexOf(value) , 1 );   //移除
+				if(object.attributeValue == 0){   //如果全部移除
+					$scope.entity.goodsDesc.specificationItems.splice(
+							$scope.entity.goodsDesc.specificationItems.indexOf(object , 1));   //从组合实体类中的specificationItems集合中移除此空集合
+				}
+			}
+		}else{     //当对象为空的时候    ,直接push到集合中一个空的对象，然后再向里面添加页面传递过来的name与value
+			$scope.entity.goodsDesc.specificationItems.push({"attributeName":name,"attributeValue":[value]});
+		}
+	}
+	
+/*	//创建SKU列表
+	$scope.createItemList=function(){
+		//列表的初始化,spec中存放的就是表头    {"网络":"移动3G","机身内存":"16G"}页面展示的时候分别填入
+		$scope.entity.itemList=[{spec:{},price:0,num:99999,status:'0',isDefault:'0'} ];	
+		//获取到选项的集合
+		var items = $scope.entity.goodsDesc.specificationItems;
+		//对选项的集合进行遍历
+		for(var i = 0 ; i < items.length ; i++){
+			
+			//添加列
+			$scope.entity.itemList = function(items[i]){
+				//获取新的列的名称，也就是属性名称
+				var attributeName = items[i].attributeName;
+				//获取属性对应下面的集合
+				var attributeValues = items[i].attributeValues;
+				var itemList = $scope.entity.itemList;
+				var newList = [];
+				for(var j = 0; j < itemList.length ; j++){
+					var oldRow = itemList[j];
+					//对所有的属性进行遍历
+					for(var j = 0 ; j < attributeValues.length ; j++){
+						var newRow = JSON.parse(JSON.stringify(oldRow));   //深度克隆
+						newRow.spec[attributeName] = attributeValues[j];
+						alert(newRow);
+						newList.push(newRow);
+					}
+				}
+				return newList;
+				
+			}
+			
+		}
+		
+	}*/
+
+
+	//创建SKU列表
+	$scope.createItemList=function(){
+		
+		$scope.entity.itemList=[{spec:{},price:0,num:99999,status:'0',isDefault:'0'} ];//列表初始化
+		
+		var items= $scope.entity.goodsDesc.specificationItems;
+		
+		for(var i=0;i<items.length;i++){
+			$scope.entity.itemList= addColumn( $scope.entity.itemList, items[i].attributeName,items[i].attributeValue );			
+		}	
+		
+	}
+	
+	//list代表的是一行    columnName表示的是当前遍历对象中的属性名称   
+	//columnValues表示的是当前遍历对象中的属性对应的值
+	addColumn=function(list,columnName,columnValues){
+		
+		var newList=[];		
+		for(var i=0;i< list.length;i++){
+			var oldRow =  list[i];			
+			//对所有的属性进行遍历   （4G,5G,3G）
+			for(var j = 0;j < columnValues.length ; j++){
+				var newRow =  JSON.parse( JSON.stringify(oldRow)  );//深克隆
+				newRow.spec[columnName]=columnValues[j];   //在将克隆后的基础对象中的spec值加上去
+				newList.push(newRow);
+			}			
+		}		
+		return newList;
+	}
+
+
 
 });	
