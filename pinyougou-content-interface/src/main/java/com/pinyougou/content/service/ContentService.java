@@ -29,6 +29,13 @@ public interface ContentService {
 	*/
 	public void add(TbContent content);
 	
+	/***
+	 * 根据广告的id查询广告的列表
+	 * @param categoryId
+	 * @return
+	 */
+	public List<TbContent> findByCategoryId(Long categoryId);
+	
 	
 	/**
 	 * 修改

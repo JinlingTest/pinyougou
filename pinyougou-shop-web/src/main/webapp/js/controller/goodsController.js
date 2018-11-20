@@ -119,17 +119,32 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		var items= $scope.entity.goodsDesc.specificationItems;
 		var object= $scope.searchObjectByKey(items,'attributeName',specName);
 		//去判断当前传递过来的此选项与选项规格有没有在查询到的specificationItems集合中	
-		//alert(JSON.stringify(object));
-		if(object==null){
+		//alert(JSON.stringify(object.attributeValue));
+		if(object == null){
 			return false;
 		}else{
-				
-			if(object.attributeValue.indexOf(value)>=0){
+			
+			/*for(var i = 0 ; i < items.length ; i++){
+				if(items[i].attributeValue == value){
+					
+					for(var j = 0 ; j < items[i].length ; j++){
+						if()
+					}
+					
+					alert(11);
+					return true;
+				}else{
+					alert(22 + "--" + items[i].attributeValue + "," + value);
+					return false;
+				}
+			}
+			*/
+			/*if(object.attributeValue.indexOf(value)>=0){
 					
 				return true;
 			}else{
 				return false;
-			}
+			}*/
 		}
 		
 	}

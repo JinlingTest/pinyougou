@@ -7,6 +7,17 @@
   </parent>
   <artifactId>pinyougou-common</artifactId>
   <dependencies>
+  
+	  <!-- 缓存 -->
+	<dependency>
+		<groupId>redis.clients</groupId>
+		<artifactId>jedis</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-redis</artifactId>
+	</dependency>
+  
   	 <!-- 文件上传组件 -->
 	<dependency>
 		<groupId>org.csource.fastdfs</groupId>

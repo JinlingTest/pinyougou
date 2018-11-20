@@ -1,6 +1,8 @@
 package com.pinyougou.content.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +24,37 @@ public class ContentServiceImpl implements ContentService {
 
 	@Autowired
 	private TbContentMapper contentMapper;
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
+
+	
+	/***
+	 * 根据广告的Id查询所有的列表
+	 */
+	@Override
+	public List<TbContent> findByCategoryId(Long categoryId) {
+		
+		List<TbContent> contentList = (List<TbContent>) redisTemplate.boundHashOps("content").get(categoryId);
+		if(contentList == null) {
+			System.out.println("从数据库读取数据存入缓存");
+			//根据content表中的catrgoryId查询广告列表
+			TbContentExample example = new TbContentExample();
+			Criteria create = example.createCriteria();
+			create.andCategoryIdEqualTo(categoryId);
+			create.andStatusEqualTo("1");    //只查询状态为1的
+			example.setOrderByClause("sort_order");    //进行排序
+			contentList = contentMapper.selectByExample(example);
+			
+			redisTemplate.boundHashOps("content").put(categoryId, contentList);
+			
+			
+		}else {
+			System.out.println("直接存redis数据库获取");
+		}
+		return contentList;
+		
+	}
 	
 	/**
 	 * 查询全部
@@ -105,5 +138,7 @@ public class ContentServiceImpl implements ContentService {
 		Page<TbContent> page= (Page<TbContent>)contentMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
+
+
 	
 }
