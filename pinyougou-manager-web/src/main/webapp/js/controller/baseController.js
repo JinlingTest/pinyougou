@@ -63,4 +63,25 @@ app.controller('baseController' ,function($scope){
 		return value;
 	}
 	
+	
+	/*
+ 	[	
+ 		{"attributeName":"网络","attributeValue":["移动3G","移动4G"]},
+  		{"attributeName":"机身内存","attributeValue":["16G","32G"]}
+	]
+ */
+	//根据key的值去集合中查询   此处的key就是“attributeName”  keyValue就是相当于页面传递过来的值(网络)
+	$scope.searchObjectByKey = function(list , key , keyValue){
+		//对集合进行遍历
+		for(var i = 0 ; i < list.length ; i++){
+	
+			//list[1][attributeName]  -->上面集合中的第一个对象中的第一个attributeName属性值
+			if(list[i][key] == keyValue){    
+				//相当于{"attributeName":"网络","attributeValue":["移动3G","移动4G"]}
+				return list[i];      
+			}
+		}
+		return null;      //当没有的时候代表的就是此对象中没有包含这个属性则返回一个空的对象
+	}
+	
 });	

@@ -29,7 +29,5 @@ app.service('goodsService',function($http){
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
 	}   
-	this.add=function(entity){
-		return $http.post('../goods/add.do',entity);
-	}
+
 });

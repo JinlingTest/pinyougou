@@ -12,6 +12,14 @@ import entity.PageResult;
  *
  */
 public interface GoodsService {
+	
+	
+	/**
+	* 批量修改状态
+	* @param ids
+	* @param status
+	*/
+	public void updateStatus(Long []ids,String status);
 
 	/**
 	 * 返回全部列表
@@ -36,7 +44,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoods goods);
+	public void update(Goods goods);
 	
 
 	/**

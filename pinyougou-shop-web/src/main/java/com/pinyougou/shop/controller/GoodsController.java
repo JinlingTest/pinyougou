@@ -69,7 +69,16 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
+	public Result update(@RequestBody Goods goods){
+		
+		//校验用户是否是当前的id
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		Goods goods2 = goodsService.findOne(goods.getGoods().getId());
+		if(!goods2.getGoods().getSellerId().equals(sellerId)
+				|| !goods.getGoods().getSellerId().equals(sellerId) ) {
+			return new Result(false, "操作非法");
+		}
+		
 		try {
 			goodsService.update(goods);
 			return new Result(true, "修改成功");

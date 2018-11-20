@@ -65,7 +65,4 @@ app.controller('baseController' ,function($scope){
 		}
 		return null;      //当没有的时候代表的就是此对象中没有包含这个属性则返回一个空的对象
 	}
-	
-	
-	
 });	
