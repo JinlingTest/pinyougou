@@ -119,7 +119,7 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		var items= $scope.entity.goodsDesc.specificationItems;
 		var object= $scope.searchObjectByKey(items,'attributeName',specName);
 		//去判断当前传递过来的此选项与选项规格有没有在查询到的specificationItems集合中	
-		alert(JSON.parse(object.attributeValue));
+		//alert(JSON.stringify(object));
 		if(object==null){
 			return false;
 		}else{

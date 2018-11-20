@@ -54,7 +54,6 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 	}
 	//保存 
 	$scope.save=function(){	
-		//提取文本编辑器的值
 		$scope.entity.goodsDesc.introduction=editor.html();
 		
 		var serviceObject;//服务层对象  				
@@ -66,8 +65,9 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		serviceObject.success(
 			function(response){
 				if(response.success){
-					//重新查询 
-		        	$scope.reloadList();//重新加载
+					alert("保存成功");
+					location.href='goods.html';
+					
 				}else{
 					alert(response.message);
 				}
@@ -75,18 +75,26 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		);				
 	}
 	
+	
 	 
 	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		goodsService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.success){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds=[];
-				}						
-			}		
-		);				
+	$scope.dele=function(){
+		if($scope.selectIds.length == 0){
+			alert("您尚未选择!")
+		}else{
+			if(confirm("您确定您要执行删除操作么?")){
+				//获取选中的复选框			
+				goodsService.dele( $scope.selectIds ).success(
+					function(response){
+						if(response.success){
+							$scope.reloadList();//刷新列表
+							$scope.selectIds=[];
+						}						
+					}		
+				);
+			}
+		}
+			
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
@@ -111,7 +119,7 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		var items= $scope.entity.goodsDesc.specificationItems;
 		var object= $scope.searchObjectByKey(items,'attributeName',specName);
 		//去判断当前传递过来的此选项与选项规格有没有在查询到的specificationItems集合中	
-		//alert(JSON.parse(object.attributeValue));
+		alert(JSON.parse(object.attributeValue));
 		if(object==null){
 			return false;
 		}else{
@@ -124,21 +132,6 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 			}
 		}
 		
-	}
-	
-	
-	 
-	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		goodsService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.success){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds=[];
-				}						
-			}		
-		);				
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
