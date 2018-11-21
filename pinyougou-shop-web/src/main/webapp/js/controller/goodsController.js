@@ -139,12 +139,12 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 				}
 			}
 			*/
-			/*if(object.attributeValue.indexOf(value)>=0){
+			if(object.attributeValue.indexOf(value)>=0){
 					
 				return true;
 			}else{
 				return false;
-			}*/
+			}
 		}
 		
 	}

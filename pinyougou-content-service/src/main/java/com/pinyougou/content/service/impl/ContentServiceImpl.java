@@ -85,10 +85,19 @@ public class ContentServiceImpl implements ContentService {
 	
 	/**
 	 * 修改
+	 * 当执行修改的时候，首先判断修改的是某一类的广告，然后再根据id将这一类的广告进行清空缓存
 	 */
 	@Override
 	public void update(TbContent content){
+		//查询修改前的分类id
+		Long categoryId = contentMapper.selectByPrimaryKey(content.getId()).getCategoryId();
+		redisTemplate.boundHashOps("content").delete(categoryId);
 		contentMapper.updateByPrimaryKey(content);
+		//如果分类的id发生了修改，
+		if(categoryId.longValue()!=content.getCategoryId().longValue()) {
+			redisTemplate.boundHashOps("content").delete(content.getCategoryId());
+		}
+		
 	}	
 	
 	/**
@@ -107,12 +116,18 @@ public class ContentServiceImpl implements ContentService {
 	@Override
 	public void delete(Long[] ids) {
 		for(Long id:ids){
+			
+			//清除缓存
+			//首先记录一下修改前的分类的id
+			Long categoryId = contentMapper.selectByPrimaryKey(id).getCategoryId();
+			redisTemplate.boundHashOps("content").delete(categoryId);
 			contentMapper.deleteByPrimaryKey(id);
+			
 		}		
 	}
 	
 	
-		@Override
+	@Override
 	public PageResult findPage(TbContent content, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
