@@ -95,10 +95,8 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		goods.getGoods().setAuditStatus("0");//状态：未审核
 		goodsMapper.insert(goods.getGoods());//插入商品基本信息
-		
 		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());//将商品基本表的ID给商品扩展表
 		goodsDescMapper.insert(goods.getGoodsDesc());//插入商品扩展表数据
-		
 		saveItemList(goods);//插入SKU商品数据	
 		
 	}

@@ -13,9 +13,9 @@ import com.pinyougou.pojo.TbSpecificationOption;
 public class Specification implements Serializable{
 
 	//一对多的关系，一个规格对应多个对个选项
-	private TbSpecification specification;
+	private TbSpecification specification;    //规格选项
 	
-	private List<TbSpecificationOption> specificationOptionList;
+	private List<TbSpecificationOption> specificationOptionList;    //规格选项的集合
 
 	public TbSpecification getSpecification() {
 		return specification;

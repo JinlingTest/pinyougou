@@ -1,0 +1,16 @@
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:49 +0800] "GET /admin/index.html HTTP/1.1" 200 20548 http-bio-9102-exec-9 22
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:50 +0800] "GET /admin/goods_edit.html HTTP/1.1" 200 16250 http-bio-9102-exec-9 1
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:50 +0800] "GET /login/getUsername.do HTTP/1.1" 200 5 http-bio-9102-exec-9 3
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:50 +0800] "GET /admin/%7B%7Bpojo.url%7D%7D HTTP/1.1" 404 1003 http-bio-9102-exec-9 1
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:50 +0800] "GET /admin/%7B%7Bimage_entity.url%7D%7D HTTP/1.1" 404 1019 http-bio-9102-exec-4 1
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /itemCat/findByParentId.do?parentId=0 HTTP/1.1" 200 1179 http-bio-9102-exec-4 7
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /itemCat/findByParentId.do?parentId=undefined HTTP/1.1" 400 968 http-bio-9102-exec-4 3
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /itemCat/findByParentId.do?parentId=undefined HTTP/1.1" 400 968 http-bio-9102-exec-9 3
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /itemCat/findOne.do?id=undefined HTTP/1.1" 400 968 http-bio-9102-exec-3 2
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /typeTemplate/findOne.do?id=undefined HTTP/1.1" 400 968 http-bio-9102-exec-8 3
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /typeTemplate/findSpecList.do?id=undefined HTTP/1.1" 400 968 http-bio-9102-exec-9 2
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:00:51 +0800] "GET /favicon.ico HTTP/1.1" 404 973 http-bio-9102-exec-10 1
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:01:23 +0800] "GET /admin/index.html HTTP/1.1" 200 20548 http-bio-9102-exec-7 2
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:01:23 +0800] "GET /plugins/jQueryUI/jquery-ui.min.js HTTP/1.1" 404 1017 http-bio-9102-exec-7 1
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:01:23 +0800] "GET /admin/home.html HTTP/1.1" 200 4335 http-bio-9102-exec-7 2
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:00:01:23 +0800] "GET /login/getUsername.do HTTP/1.1" 200 5 http-bio-9102-exec-7 3

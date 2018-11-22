@@ -334,19 +334,16 @@ app.controller('goodsController' ,function($scope,$controller,$location ,goodsSe
 		
 		
 		$scope.status=['未审核','已审核','审核未通过','已关闭'];
-		
 		//商品分类列表
 		//查询商品的分类列表
 		$scope.itemCatList = [];
 		$scope.findItemCatList = function(){
-			
 			//查询所有的分类  ，不使用关联查询
 			itemCatService.findAll().success(function(response){
 				for(var i = 0 ; i < response.length ; i++){
 					//将查询到的商品分类的id作为下标，对应其值，在页面进行获取的时候直接通过Index就可以获取到的对应的值
 					$scope.itemCatList[response[i].id] = response[i].name;
-				}
-				
+				}	
 			})
 			
 			
