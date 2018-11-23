@@ -13,7 +13,14 @@ public class TbTypeTemplate implements Serializable{
 
     private String customAttributeItems;
 
-    public Long getId() {
+    
+    @Override
+	public String toString() {
+		return "TbTypeTemplate [id=" + id + ", name=" + name + ", specIds=" + specIds + ", brandIds=" + brandIds
+				+ ", customAttributeItems=" + customAttributeItems + "]";
+	}
+
+	public Long getId() {
         return id;
     }
 

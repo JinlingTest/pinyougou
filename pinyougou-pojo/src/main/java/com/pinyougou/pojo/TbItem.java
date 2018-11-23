@@ -261,4 +261,11 @@ public class TbItem implements Serializable{
     public void setSeller(String seller) {
         this.seller = seller == null ? null : seller.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbItem [id=" + id + ", title=" + title + ", sellPoint=" + sellPoint + ", price=" + price
+				+ ", stockCount=" + stockCount + ", num=" + num + ", barcode=" + barcode + ", image=" + image + "]";
+	}
+    
 }

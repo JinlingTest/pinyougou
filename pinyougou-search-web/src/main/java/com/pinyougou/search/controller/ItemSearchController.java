@@ -22,10 +22,10 @@ public class ItemSearchController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public Map<String, Object> search(@RequestBody Map searchMap){
-		System.out.println(searchMap);
-		Map<String, Object> search = itemSearchService.search(searchMap);
-		System.out.println(search);
+	public Map search(@RequestBody Map searchMap){
+		System.out.println("搜索关键词："+searchMap);
+		Map search = itemSearchService.search(searchMap);
+		System.out.println("返回的结果："+search);
 		return search;
 	}
 	

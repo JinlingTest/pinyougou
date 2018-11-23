@@ -80,7 +80,7 @@
 		<scope>provided</scope>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.noggit/noggit -->
-	<dependency>
+	 <dependency>
 	    <groupId>org.noggit</groupId>
 	    <artifactId>noggit</artifactId>
 	    <version>0.5</version>
@@ -90,6 +90,11 @@
 	<dependency>
 		<groupId>com.pinyougou</groupId>
 		<artifactId>pinyougou-search-interface</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>com.pinyougou</groupId>
+		<artifactId>pinyougou-common</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 </dependencies>

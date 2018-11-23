@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -31,7 +33,32 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	private TbTypeTemplateMapper typeTemplateMapper;
 	
 	@Autowired
-	TbSpecificationOptionMapper  specificationOptionMapper;
+	private TbSpecificationOptionMapper  specificationOptionMapper;
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
+	
+	/***
+	 * 更新缓存
+	 */
+	private void saveToRedis(){
+		
+		//首先要获取模板表的数据
+		List<TbTypeTemplate> list = findAll();
+		//遍历模板表，对每个模板进行
+		for (TbTypeTemplate tbTypeTemplate : list) {
+			//存储品牌表
+			List<Map> brandIds = JSON.parseArray(tbTypeTemplate.getBrandIds(),Map.class);
+			redisTemplate.boundHashOps("brandList").put(tbTypeTemplate.getId(), brandIds);
+			
+			//缓存选项规格表
+			List<Map> specIds = findSpecList(tbTypeTemplate.getId());//根据模板 ID 查询规格列表
+			redisTemplate.boundHashOps("specList").put(tbTypeTemplate.getId(),specIds);
+		}
+		System.out.println("同步redis缓存模板表数据");
+		
+	}
+	
 	
 	/**
 	 * 查询全部
@@ -48,6 +75,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbTypeTemplate> page=   (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(null);
+		
+	
+		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -113,6 +143,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		}
 		
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
+		
+		//更新缓存
+		saveToRedis();
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 		/***
